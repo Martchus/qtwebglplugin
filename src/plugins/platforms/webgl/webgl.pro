@@ -1,10 +1,20 @@
 TARGET = qwebgl
 QT += \
     websockets \
-    gui-private \
-    eventdispatcher_support-private \
-    fontdatabase_support-private \
-    theme_support-private
+    gui-private
+
+# Fix linker error when building libqwebgl.dll by specifying linker flags forer flags for
+# required modules manually (otherwise order is messed)
+LIBS += \
+    -lQt5EventDispatcherSupport \
+    -lQt5FontDatabaseSupport \
+    -lQt5ThemeSupport \
+    -lfreetype -lole32 -lgdi32 -ldwmapi -luuid
+# However, this workaround leads to the necessity of specifying include dirs manually
+INCLUDEPATH += \} \
+    $$QT_INSTALL_PREFIX/include/qt/QtEventDispatcherSupport/$${QT_VERSION} \
+    $$QT_INSTALL_PREFIX/include/qt/QtFontDatabaseSupport/$${QT_VERSION} \
+    $$QT_INSTALL_PREFIX/include/qt/QtThemeSupport/$${QT_VERSION}
 
 qtHaveModule(quick) {
     QT += quick
